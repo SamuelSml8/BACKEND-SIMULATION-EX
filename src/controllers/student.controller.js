@@ -43,7 +43,6 @@ const createStudent = async (req, res) => {
 const getStudents = async (req, res) => {
   try {
     const students = await Student.find();
-
     res.status(200).json({
       ok: true,
       message: "Students",
@@ -61,6 +60,22 @@ const getStudents = async (req, res) => {
 
 const getStudentById = async (req, res) => {
   try {
+    const studentFound = await Student.findOne({
+      identification: req.params.id,
+    });
+    if (!studentFound) {
+      return res.status(404).json({
+        ok: false,
+        message: "Student not found",
+        data: null,
+      });
+    }
+
+    res.status(200).json({
+      ok: true,
+      message: "Student found",
+      data: studentFound,
+    });
   } catch (error) {
     console.log(`Error: `, error);
     res.status(500).json({
