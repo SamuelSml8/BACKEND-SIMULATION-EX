@@ -49,7 +49,7 @@ const getStudents = async (req, res) => {
       data: students,
     });
   } catch (error) {
-    console.log(`Error: `, error);
+    console.log(`Error getting all students (GET): `, error);
     res.status(500).json({
       ok: false,
       message: "Error Internal Server",
@@ -77,7 +77,7 @@ const getStudentById = async (req, res) => {
       data: studentFound,
     });
   } catch (error) {
-    console.log(`Error: `, error);
+    console.log(`Error getting a student by identification (GET/:id): `, error);
     res.status(500).json({
       ok: false,
       message: "Error Internal Server",
