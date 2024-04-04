@@ -1,5 +1,5 @@
 // Controller
-const Student = require("../models/student.model.js");
+const Student = require("../models/student.model.js"); //Se importa el modelo Student
 
 const createStudent = async (req, res) => {
   try {
@@ -47,13 +47,13 @@ const createStudent = async (req, res) => {
 
 const getStudents = async (req, res) => {
   try {
-    const students = await Student.find();
-    res.status(200).json({
+    const students = await Student.find(); //Obtenemos todos los estudiantes existentes en la base de datos
+    res.status(200).json({ // status 200 (OK)
       ok: true,
       message: "Students",
       data: students,
     });
-  } catch (error) {
+  } catch (error) { // Manejo de erroress
     console.log(`Error getting all students (GET): `, error);
     res.status(500).json({
       ok: false,
