@@ -3,29 +3,34 @@ const Student = require("../models/student.model.js");
 
 const createStudent = async (req, res) => {
   try {
-    const data = req.body;
-    const newStudent = new Student(data);
+    const data = req.body; // Guarda lo que el usuario envía en una constante llamada data
+    const newStudent = new Student(data); // Crea una constante newStudent que almacena la creación de un nuevo estudiante
     const identificationExist = await Student.findOne({
       identification: req.body.identification,
-    });
+    }); // valida si ya existe un estudiante con la identificación que ingresó el nuevo estudiante
 
     if (identificationExist) {
+      //Si ya existe un estudiante con esa identificación, no podrá crearse el nuevo estudiante
       return res.status(400).json({
+        // status 400 (BAD_REQUEST)
         ok: false,
         message: "Student identification already exist",
         data: null,
       });
     }
 
-    const savedStudent = await newStudent.save();
+    const savedStudent = await newStudent.save(); //Si el estudiante no entra al anterior if, es decir su identificación es única, se guarda en la base de datos
     return res.status(201).json({
+      // status 201 (CREATED)
       ok: true,
       message: "Student created succesfully",
       data: savedStudent,
     });
   } catch (error) {
+    // Manejo de errores
     if (error.value == undefined) {
-      return res.status(400).json({
+      // Cuando el usuario intenta crear un estudiante y olvida un campo, ocurre un error ya que en el modelo todas las propiedades son requeridas, esto hace que salte un error evitando que pueda hacer una validación en el catch, así que analizando, el error me trae un objeto con una llave "value" por cada propiedad que el usuario deja vacía, así que la llave "value" del objeto me trae un valor undefined.
+      return res.status(400).json({ // status 400 (BAD_REQUEST)
         ok: false,
         message: "All fields required",
         data: null,
