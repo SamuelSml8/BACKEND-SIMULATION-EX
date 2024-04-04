@@ -146,7 +146,7 @@ const deleteStudent = async (req, res) => {
   try {
     const studentFound = await Student.findOneAndDelete({
       identification: req.params.id,
-    });
+    }); // Buscamos al estudiante con ayuda del parametro y lo eliminamos
 
     if (!studentFound) {
       return res.status(404).json({
@@ -154,13 +154,13 @@ const deleteStudent = async (req, res) => {
         message: "Student not found",
         data: null,
       });
-    }
+    } // En caso de no encontrar ningún estudiante, retornamos un status 404 (NOT_FOUND) y no eliminamos ningún estudiante
 
     res.status(200).json({
       ok: true,
       message: "Student deleted succesfully",
       data: studentFound,
-    });
+    }); // Si todo sale bien, retornamos la eliminación del estudiante junto con su respectivo status 200 (OK)
   } catch (error) {
     console.log(`Error: `, error);
     res.status(500).json({
@@ -177,4 +177,4 @@ module.exports = {
   getStudentById,
   updateStudent,
   deleteStudent,
-};
+}; // Importación de modulos
