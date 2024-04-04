@@ -12,7 +12,7 @@ const createStudent = async (req, res) => {
     if (identificationExist) {
       return res.status(400).json({
         ok: false,
-        message: "Student already exist",
+        message: "Student identification already exist",
         data: null,
       });
     }
@@ -88,6 +88,39 @@ const getStudentById = async (req, res) => {
 
 const updateStudent = async (req, res) => {
   try {
+    const identificationExist = await Student.findOne({
+      identification: req.body.identification,
+    });
+
+    if (identificationExist && req.params.id != req.body.identification) {
+      return res.status(400).json({
+        ok: false,
+        message: "Student identification already exist",
+        data: null,
+      });
+    }
+
+    const studentFound = await Student.findOneAndUpdate(
+      {
+        identification: req.params.id,
+      },
+      req.body,
+      { new: true }
+    );
+
+    if (!studentFound) {
+      return res.status(404).json({
+        ok: false,
+        message: "Student not found",
+        data: null,
+      });
+    }
+
+    res.status(200).json({
+      ok: true,
+      message: "Student updated succesfully",
+      data: studentFound,
+    });
   } catch (error) {
     console.log(`Error: `, error);
     res.status(500).json({
