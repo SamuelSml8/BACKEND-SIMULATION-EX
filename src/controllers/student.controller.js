@@ -7,10 +7,18 @@ const createStudent = async (req, res) => {
     const newStudent = new Student(data);
     const identification = await Student.findOne(req.identification);
 
-    if (!identification) {
+    if (identification) {
       return res.status(400).json({
         ok: false,
         message: "Student already exist",
+        data: null,
+      });
+    }
+
+    if (data.length == 0) {
+      return res.status(400).json({
+        ok: false,
+        message: "All fields required",
         data: null,
       });
     }
@@ -22,6 +30,13 @@ const createStudent = async (req, res) => {
       data: savedStudent,
     });
   } catch (error) {
+    if (error.value == undefined) {
+      return res.status(400).json({
+        ok: false,
+        message: "All fields required",
+        data: null,
+      });
+    }
     console.log(`Error creating a Student (POST): `, error);
     res.status(500).json({
       ok: false,
