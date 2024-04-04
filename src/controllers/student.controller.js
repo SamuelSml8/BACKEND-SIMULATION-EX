@@ -5,20 +5,14 @@ const createStudent = async (req, res) => {
   try {
     const data = req.body;
     const newStudent = new Student(data);
-    const identification = await Student.findOne(req.identification);
+    const identificationExist = await Student.findOne({
+      identification: req.body.identification,
+    });
 
-    if (identification) {
+    if (identificationExist) {
       return res.status(400).json({
         ok: false,
         message: "Student already exist",
-        data: null,
-      });
-    }
-
-    if (data.length == 0) {
-      return res.status(400).json({
-        ok: false,
-        message: "All fields required",
         data: null,
       });
     }
@@ -48,6 +42,13 @@ const createStudent = async (req, res) => {
 
 const getStudents = async (req, res) => {
   try {
+    const students = await Student.find();
+
+    res.status(200).json({
+      ok: true,
+      message: "Students",
+      data: students,
+    });
   } catch (error) {
     console.log(`Error: `, error);
     res.status(500).json({
