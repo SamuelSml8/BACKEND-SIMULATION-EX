@@ -65,10 +65,10 @@ const getStudents = async (req, res) => {
 
 const getStudentById = async (req, res) => {
   try {
-    const studentFound = await Student.findOne({
+    const studentFound = await Student.findOne({ // Con ayuda del parametro id, buscamos y comparamos en la base de datos un estudiante con la misma identificación para así guardarlo en una constante llamada "studentFound"
       identification: req.params.id,
     });
-    if (!studentFound) {
+    if (!studentFound) { // si el estudiante no existe, envía un estado not found (404) y no trae ningún estudiante
       return res.status(404).json({
         ok: false,
         message: "Student not found",
@@ -76,7 +76,7 @@ const getStudentById = async (req, res) => {
       });
     }
 
-    res.status(200).json({
+    res.status(200).json({ //Si no entra a la anterior validación (es decir, el estudiante si existe) muestra al estudiante.
       ok: true,
       message: "Student found",
       data: studentFound,
